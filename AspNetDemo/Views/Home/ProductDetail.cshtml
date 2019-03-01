@@ -36,6 +36,8 @@
     <link href="../../Content/HomeAssets/css/style.css" rel="stylesheet">
     <!-- Responsive Stylesheet File -->
     <link href="../../Content/HomeAssets/css/responsive.css" rel="stylesheet">
+    <!-- my style -->
+    <link href="../../Content/HomeAssets/css/myStyle.css" rel="stylesheet">
     <!-- datetime piker -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <!-- =======================================================
@@ -167,7 +169,7 @@
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <p>Thời gian thuê</p>
                                                 <input type="text" name="daterange" id="daterange" />
-                                                @*<div id="date-error" class="text-danger alert alert-danger">Bạn hãy chọn đúng ngày thuê hiện tại</div>*@
+                                                <div id="date-error" class="text-danger alert alert-danger error">Bạn hãy chọn đúng ngày thuê hiện tại</div>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <p>Tổng số tiền</p>
@@ -377,25 +379,23 @@
             var employee = document.getElementById("numberEmployee");
             var daterange = document.getElementById("daterange");
             var dates = daterange.value.split(" - ");
-
             var startDate = new Date(dates[0]).getTime();
             var endDate = new Date(dates[1]).getTime();
             var currentDate = new Date().getTime();
             if (startDate === endDate) {
                 var finalEndDate = new Date(endDate + 24 * 60 * 60 * 1000);
                 daterange.value = dates[0] + ' - ' + (finalEndDate.getMonth() + 1) + '/' + finalEndDate.getDate() + '/' + finalEndDate.getFullYear();
-                window.location.href = '/Customer/Cart/AddtoCart?id=' + @Model.Id + '&numberOfEmployee=' + $("#NumberOfEmployee").val() + '&date=' + realDate;
-            } else {
-                alert(1);
+                window.location.href = '/Customer/Cart/AddtoCart?id=' + @Model.Id + '&numberOfEmployee=' + $("#NumberOfEmployee").val() + '&date=' + daterange.value;
+                }
+            if (currentDate > startDate) {
+                daterange.style.border = "1px solid red";
+               $("#date-error").show();
+                return;
             }
-            //if (currentDate > startDate) {
-            //    daterange.style.border = "1px solid red";
-            //   $("#date-error").show();
-            //    return;
-            //}
-            //else {
-            //    $("#date-error").hide();
-            //}
+            else {
+                daterange.style.border = "1px solid #E5E5E5";
+                $("#date-error").hide();
+            }
             window.location.href = '/Customer/Cart/AddtoCart?id=' + @Model.Id + '&numberOfEmployee=' + employee.value + '&date=' + daterange.value;
 
         }
